@@ -46,7 +46,10 @@
 								AP: Ausdauerpunkte
 							</li>
 							<li>
-								W: Wucht
+								GW: Grundwucht der Waffe
+							</li>
+							<li>
+								AW: Angriffswucht
 							</li>
 							<li>
 								MobMal: Mobilitätsmalus der Rüstung
@@ -136,7 +139,7 @@
 					<div>
 						<h4>Angreifen (Wucht und Schnitt)</h4>
 						<p>
-							Jedes Objekt hat einen Wuchtwert W.
+							Jedes Objekt hat eine Grundwucht (GW).
 							Dieser Wert gibt an, wie viele KP nötig sind, um mit diesem Objekt einen Angriff auszuführen
 							(ein Leitfaden für Wuchtwerte ist am Ende dieses Abschnitts zu finden).
 							Es ist möglich, pro Zug mehrere Angriffe auszuführen, wenn dafür genügend KP vorhanden sind.
@@ -156,7 +159,7 @@
 							<p>
 								<ul>
 									<li>
-										Häufiger angreifen: Ein Angriff kostet KP in Höhe des Wuchtwertes der Waffe (s.u.).
+										Häufiger angreifen: Ein Angriff kostet KP in Höhe der Grundwucht der Waffe (s.u.).
 									</li>
 									<li>
 										Zielen: Die Angriffsprobe wird pro KP um 1 erleichtert.
@@ -190,43 +193,57 @@
 							</p>
 						</div>
 						<div>
-							<h5>Leitfaden / Beispiele für Wuchtwerte</h5>
+							<h5>Leitfaden / Beispiele für Grundwucht- und Paradewerte</h5>
 							<table>
 								<tr>
 									<th>Waffe</th>
-									<th>Wuchtwert</th>
+									<th>Grundwucht</th>
+									<th>Paradewert</th>
 								</tr>
 								<tr>
 									<td>Dolch</td>
 									<td>4</td>
+									<td>0</td>
 								</tr>
 								<tr>
-									<td>rapier</td>
+									<td>Parierdolch</td>
+									<td>4</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td>Rapier</td>
+									<td>5</td>
 									<td>5</td>
 								</tr>
 								<tr>
 									<td>Einhänder</td>
 									<td>6</td>
+									<td>2</td>
 								</tr>
 								<tr>
 									<td>Anderthalbhänder</td>
 									<td>8</td>
+									<td>1</td>
 								</tr>
 								<tr>
 									<td>Zweihänder</td>
 									<td>10</td>
+									<td>0</td>
 								</tr>
 								<tr>
 									<td>Axt</td>
 									<td>12</td>
+									<td>-2</td>
 								</tr>
 								<tr>
 									<td>Großer Hammer</td>
 									<td>14</td>
+									<td>-4</td>
 								</tr>
 							</table>
 							<p>
-								<em>Wichtig: Zum Wuchtwert zweihändig geführter Objekte wird 3 addiert!</em>
+								<em>Wichtig: Zur Wucht zweihändig geführter Objekte wird 3 addiert
+									(dies beeinflusst sowohl die AW als auch die verbrauchten KP)!</em>
 							</p>
 						</div>
 					</div>
@@ -234,7 +251,9 @@
 						<h4>Parieren</h4>
 						<p>
 							Eine Parade kostet KP, als wäre sie ein gewöhnlicher Angriff. Sie wird angekündigt, bevor der Angreifer seine Probe wirft,
-							und ihre Probe erfolgt auf (Waf + Par | Ref + Par) <b>(ÄNDERN!)</b>.
+							und ihre Probe erfolgt auf (Waf + Par | Ref + Par). <br>
+							<b><em>Diese Berechnung muss geändert werden, da es zu einfach ist, mit schweren Waffen zu parieren.<br>
+							Alternativ haben schwere Waffen wie z.B. ein Zweihänder einen negativen Paradewert.</em></b>
 							Bei einer erfolgreichen Parade verschiebt sich das Tempo um 1 zu Gunsten des Verteidigers.
 						</p>
 					</div>
@@ -248,8 +267,8 @@
 						<h4>Ausdauerkosten beim Parieren und Blocken</h4>
 						<p>
 							Nach jeder erfolgreichen Verteidigung wird gewürfelt:
-							Wenn Kk + d20 < W (wobei Kk die Körperkraft des Verteidigers und W die Wucht des Angriffs ist),
-							verliert der Verteidiger AP in Höhe der Wucht des Angriffs.
+							Wenn Kk + d20 < AW (wobei Kk die Körperkraft des Verteidigers und AW die Angriffswucht ist),
+							verliert der Verteidiger AP in Höhe der Angriffswucht.
 							Hart schlagen und warten, bis der Gegner müde wird, ist also eine Option.
 						</p>
 					</div>
@@ -334,6 +353,7 @@
 						<li>Falls dein Angriff eine Finte enthält, wird diese Probe zuerst durchgeführt.</li>
 						<li>Die Angriffsprobe ((Kk | Ge) + Waf) wird durchgeführt. Stelle sicher, dass KP und AP abgezogen worden sind.</li>
 						<li>Der verteidigende Charakter führt seine Verteidigungsprobe aus.</li>
+						<li>Der verteidigende Charakter prüft außerdem, ob er durch die Verteidigung AP verliert.</li>
 					</ul>
 				</div>
 			</div>

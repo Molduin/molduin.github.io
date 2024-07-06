@@ -10,16 +10,15 @@
 
 body{
     margin: 0px;
-    margin-top: 6em;
     background-color: #013220;
     color: #ad8d49;
     color: #c2ac5d;
-    color: #B8860B;
+    color: #b8860b;
     font-family: 'Artifika';
 }
 
 #title{
-    background: #102090;
+    background: #404040;
     position: fixed;
     top: 0px;
     width: 100%;
@@ -29,6 +28,27 @@ body{
 }
 
 #content{
-    max-width: 900px;
-    margin: auto;
+    margin: 10px;
+}
+
+table, th, td{
+    border: 1px solid #b8860b;
+    padding: 3px;
+    padding-right: 7px;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+@media only screen and (min-width: 800px) {
+    body{
+        margin: 0px;
+        margin-top: 6em;
+    }
+
+    #content{
+        max-width: calc(250px + 30%);
+        margin: auto;
+    }
 }
