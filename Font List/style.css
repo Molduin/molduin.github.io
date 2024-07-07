@@ -1,0 +1,22 @@
+body{
+    margin: 0px;
+    background: #161616;
+    color: #bfbfbf;
+    font-size: 16pt;
+}
+
+#content{
+    margin: 10px;
+}
+
+li{
+    margin: 6px;
+}
+
+@media only screen and (min-width: 500px) {
+
+    #content{
+        max-width: calc(330px + 30%);
+        margin: auto;
+    }
+}

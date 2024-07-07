@@ -246,8 +246,7 @@
 			td.innerText = right;
 			if(className != null) td.classList.add(className);
 			if(id != null) td.id = id;
-			td.style.width = "25px";
-			td.style.textAlign = "right";
+			td.classList.add("numTable");
 			tr.appendChild(td);
 
 			if(isAdjustable){
@@ -301,5 +300,7 @@
 
 		calculateValues();
 	}
+
+	calculateValues();
 
 </script>
