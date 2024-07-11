@@ -10,7 +10,6 @@
 
 body{
     margin: 0px;
-    margin-top: 6em;
     background-color: #013220;
     color: #ad8d49;
     color: #c2ac5d;
@@ -26,10 +25,16 @@ body{
     height: 5em;
     display: flex;
     justify-content: center;
+    border-bottom: 1px solid #b8860b;
+}
+
+#nav{
+    display: none;
 }
 
 #content{
     margin: 10px;
+    margin-top: 6em;
 }
 
 table, th, td{
@@ -71,13 +76,44 @@ button:disabled:hover{
 }
 
 @media only screen and (min-width: 800px) {
-    body{
-        margin: 0px;
-        margin-top: 6em;
+
+    nav{
+        position: fixed;
+        top: 0em;
+        left: 0px;
+        width: 200px;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding-top: 1em;
+
+        border-right: 1px solid #b8860b;
+        background-color: #404040;
+        z-index: 1;
+    }
+
+    nav > a{
+        color: #b8860b;
+    }
+
+    #title{
+        position: fixed;
+        width: calc(100% - 200px);
+        left: 200px;
+    }
+
+    #main{
+        position: absolute;
+        width: calc(100% - 200px);
+        left: 200px;
     }
 
     #content{
-        max-width: calc(250px + 30%);
+        max-width: calc(200px + 50%);
         margin: auto;
+        margin-top: 6em;
     }
 }
