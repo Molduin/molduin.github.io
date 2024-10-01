@@ -7,17 +7,20 @@
 		<link rel="icon" type="image/x-icon" href="images/favicon.ico">
 	</head>
 	<body>
-		<div id="title">
-			<h1>Angriffsrechner</h1>
-		</div>
 
 		<nav>
 			<h2>Navigation</h2>
-			<a href="index.html">Hauptseite</a>
+			<a href="../index.html">Hauptseite</a>
 			<a href="kampfsystem.html">Kampfsystem</a>
+			<a href="magie.html">Magiesystem</a>
 		</nav>
 
 		<div id="main">
+
+			<div id="title">
+				<h1>Angriffsrechner</h1>
+			</div>
+
 			<div id="content">
 				<table>
 					<tr>
@@ -26,10 +29,10 @@
 						</td>
 						<td id="Kk">5</td>
 						<td>
-							<button onclick="changeValue('Kk', -1, false, false)">-</button>
+							<button onclick="changeValue('Kk', -1, false, false, true)">-</button>
 						</td>
 						<td>
-							<button onclick="changeValue('Kk', +1, false, false)">+</button>
+							<button onclick="changeValue('Kk', +1, false, false, true)">+</button>
 						</td>
 					</tr>
 					<tr>
@@ -38,10 +41,10 @@
 						</td>
 						<td id="GW">0</td>
 						<td>
-							<button onclick="changeValue('GW', -1, false, false)">-</button>
+							<button onclick="changeValue('GW', -1, false, false, true)">-</button>
 						</td>
 						<td>
-							<button onclick="changeValue('GW', +1, false, false)">+</button>
+							<button onclick="changeValue('GW', +1, false, false, true)">+</button>
 						</td>
 					</tr>
 					<tr>
@@ -50,10 +53,10 @@
 						</td>
 						<td id="Waf">0</td>
 						<td>
-							<button onclick="changeValue('Waf', -1, false, false)">-</button>
+							<button onclick="changeValue('Waf', -1, false, false, true)">-</button>
 						</td>
 						<td>
-							<button onclick="changeValue('Waf', +1, false, false)">+</button>
+							<button onclick="changeValue('Waf', +1, false, false, true)">+</button>
 						</td>
 					</tr>
 					<tr>
@@ -79,10 +82,10 @@
 								<td>Bereits benutzte KP</td>
 								<td class="totalCost" id="bereitsBenutzteKP" style="width:25px">0</td>
 								<td>
-									<button onclick="changeValue('bereitsBenutzteKP', -1, true, false)">-</button>
+									<button onclick="changeValue('bereitsBenutzteKP', -1, true, false, false)">-</button>
 								</td>
 								<td>
-									<button onclick="changeValue('bereitsBenutzteKP', +1, true, false)">+</button>
+									<button onclick="changeValue('bereitsBenutzteKP', +1, true, false, false)">+</button>
 								</td>
 							</tr>
 						</table>
@@ -120,6 +123,7 @@
 			let attackTables = document.querySelectorAll(".attackTable");
 			for(var i = 0; i < attackTables.length; i++){
 				var totalTableCost = 0;
+				let hitKP = 0;
 
 				let table = attackTables[i];
 				let tableRows = table.childNodes;
@@ -132,6 +136,9 @@
 						if(node.classList.contains("cost") || node.classList.contains("baseCost")){
 							totalTableCost += parseInt(node.innerText);
 						}
+						if(node.classList.contains("hit")){
+							hitKP = parseInt(node.innerText);
+						}
 					}
 				}
 
@@ -143,6 +150,9 @@
 						let node = tableData[j];
 						if(node.classList.contains("totalCost")){
 							node.innerText = totalTableCost;
+						}
+						else if(node.classList.contains("AW")){
+							node.innerText = calculateAW(minKP, hitKP);
 						}
 					}
 				}
@@ -166,10 +176,17 @@
   		}, 0)
 	}
 
+	function calculateAW(GW, KP){
+		if (KP <= GW) return 4*KP;
+		let AW = 4*GW;
+		KP -= GW;
+		AW += KP;
+		return AW;
+	}
+
 	let atkCount = 0;
 	function addAttack(isTrick){
 		let tr = null;
-		let th = null;
 		let td = null;
 
 		let parent = document.getElementById("angriffe");
@@ -188,28 +205,42 @@
 
 		if(isTrick){
 
-			newTableRow(table, "Finte", "", "totalCost", null, true, false, 0, false);
+			table.appendChild(createTableRow("Finte", "", ["totalCost"], null, true, false, 0, false));
 
-			newTableRow(table, "Grundkosten der Finte", "1", "cost", null, false, false, 0, false);
+			table.appendChild(createTableRow("Grundkosten der Finte", "1", ["cost"], null, false, false, 0, false));
 
-			newTableRow(table, "+Erfolgswahrscheinlichkeit", "0", "cost", id+"erfolgswahrscheinlichkeit", false, true, 1, true);
+			table.appendChild(createTableRow("+Erfolgswahrscheinlichkeit", "0", ["cost"], id+"erfolgswahrscheinlichkeit", false, true, 1, true));
 
-			newTableRow(table, "+Effekt", "0", "cost", id+"effekt", false, true, 1, true);
+			table.appendChild(createTableRow("+Effekt", "0", ["cost"], id+"effekt", false, true, 1, true));
 		}
 
 		else {
 
-			newTableRow(table, "Angriff", "", "totalCost", null, true, false, 0, false);
+			tr = createTableRow("Angriff", "", ["totalCost"], null, true, false, 0, false);
+			td = document.createElement("th");
+			td.colSpan = 2;
+			td.innerText = "AW:";
+			tr.appendChild(td);
+			table.appendChild(tr);
 
-			newTableRow(table, "Grundkosten des Angriffs", "", "baseCost", null, false, false, 0, false);
+			tr = createTableRow("Grundkosten des Angriffs", "", ["baseCost"], null, false, false, 0, false);
 
-			newTableRow(table, "Zielen", "0", "cost", id+"zielen", false, true, 1, true);
+			// AW
+			td = document.createElement("td");
+			td.colSpan = 2;
+			td.classList.add("numTable");
+			td.classList.add("AW");
+			td.innerText = "";
+			tr.appendChild(td);
+			table.appendChild(tr);
 
-			newTableRow(table, "Härter Schlagen", "0", "cost", id+"härterSchlagen", false, true, 2, false);
+			table.appendChild(createTableRow("Härter Schlagen", "0", ["cost", "hit"], id+"härterSchlagen", false, true, 1, false));
 
-			newTableRow(table, "Schneiden", "0", "cost", id+"schneiden", false, true, 1, true);
+			table.appendChild(createTableRow("Zielen", "0", ["cost"], id+"zielen", false, true, 1, true));
 
-			newTableRow(table, "Schwachstellen finden", "0", "cost", id+"schwachstellenFinden", false, true, 1, true);
+			table.appendChild(createTableRow("Schneiden", "0", ["cost"], id+"schneiden", false, true, 1, true));
+
+			table.appendChild(createTableRow("Schwachstellen finden", "0", ["cost"], id+"schwachstellenFinden", false, true, 1, true));
 		}
 
 		div.appendChild(table);
@@ -234,57 +265,73 @@
 	}
 
 	/**
-	 * table: DOM Element
 	 * left: String
 	 * right: String
-	 * className? : String
+	 * className? : Array[String]
 	 * id? : String (wird der Zahl zugewiesen)
 	 * isHead: Bool
 	 * isAdjustable: Bool
 	 * stepSize: Int (bei einem Click auf "-" oder "+" wird die Zahl um so viel reduziert bzw. erhöht)
 	 * checkWaf: Bool (true, wenn der Wert Waf nicht überschreiten darf)
 	 */
-	function newTableRow(table, left, right, className, id, isHead, isAdjustable, stepSize, checkWaf){
-		let tr = document.createElement("tr");
+	function createTableRow(left, right, classNames, id, isHead, isAdjustable, stepSize, checkWaf){
 
-			let td = isHead ? document.createElement("th") : document.createElement("td");
-			td.innerText = left;
-			tr.appendChild(td);
+	let tr = document.createElement("tr");
 
-			td = isHead ? document.createElement("th") : document.createElement("td");
-			td.innerText = right;
-			if(className != null) td.classList.add(className);
-			if(id != null) td.id = id;
-			td.classList.add("numTable");
-			tr.appendChild(td);
+		let td = isHead ? document.createElement("th") : document.createElement("td");
+		td.innerText = left;
+		tr.appendChild(td);
 
-			if(isAdjustable){
-				td = document.createElement("td");
+		td = isHead ? document.createElement("th") : document.createElement("td");
+		td.innerText = right;
+		if(classNames != null){
+			//td.classList.add(classNames);
+			classNames.forEach(element => {
+				if(element != null)
+					td.classList.add(element);
+			});
+		}
+		if(id != null) td.id = id;
+		td.classList.add("numTable");
+		tr.appendChild(td);
 
-				let btn = document.createElement("button");
-				btn.innerText = "-";
-				btn.onclick = function(){
-					changeValue(id, -stepSize, true, checkWaf);
-				}
+		if(isAdjustable){
+			td = document.createElement("td");
 
-				td.appendChild(btn);
-
-				tr.appendChild(td);
-
-
-				td = document.createElement("td");
-
-				btn = document.createElement("button");
-				btn.innerText = "+";
-				btn.onclick = function(){
-					changeValue(id, +stepSize, true, checkWaf);
-				}
-
-				td.appendChild(btn);
-
-				tr.appendChild(td);
+			let btn = document.createElement("button");
+			btn.innerText = "-";
+			btn.onclick = function(){
+				changeValue(id, -stepSize, true, checkWaf, true);
 			}
 
+			td.appendChild(btn);
+
+			tr.appendChild(td);
+
+
+			td = document.createElement("td");
+
+			btn = document.createElement("button");
+			btn.innerText = "+";
+			btn.onclick = function(){
+				changeValue(id, +stepSize, true, checkWaf, true);
+			}
+
+			td.appendChild(btn);
+
+			tr.appendChild(td);
+		}
+
+	return tr;
+	}
+
+	function tableHeadRow(table, left){
+		let tr = createTableRow(left, "", "totalCost", null, true, false, 0, false);
+		let td = document.createElement("th");
+		td.innerText = "55";
+		td.colSpan = 2;
+		td.rowSpan = 2;
+		tr.appendChild(td);
 		table.appendChild(tr);
 	}
 
@@ -294,13 +341,13 @@
 	 * check: Bool
 	 * checkWaf: Bool (true, wenn der Wert Waf nicht überschreiten darf)
 	 */ 
-	function changeValue(id, stepSize, checkKP, checkWaf){
+	function changeValue(id, stepSize, checkKP, checkWaf, checkPositive){
 		let element = document.getElementById(id);
 		let value = parseInt(element.innerText);
 
 		if(checkKP && stepSize > 0 && parseInt(document.getElementById("übrigeKP").innerText) < stepSize)
 			return;
-		if (stepSize < 0 && value <= 0)
+		if (checkPositive && stepSize < 0 && value <= 0)
 			return;
 		if (checkWaf && stepSize > 0 && parseInt(document.getElementById("Waf").innerText) <= value)
 			return;

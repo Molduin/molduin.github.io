@@ -1,0 +1,66 @@
+:root{
+    --color1: #07485b;
+    --color2: #44075b;
+    --color3: #5b1a07;
+    --color4: #1e5b07;
+    --colorWrite: #d7ae0d;
+    /*--colorWrite: #eeeeee;*/
+}
+
+/* MF (mobile first) design */
+
+body{
+    background-color: var(--color1 );
+    color: var(--colorWrite);
+    font-size: 16pt;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+#title{
+    top: 0px;
+    width: 100%;
+
+    text-align: center;
+    justify-content: center;
+
+    background-color: var(--color4);
+    border-bottom: 1px solid var(--colorWrite);
+}
+
+#main{
+    display: flex;
+    flex-direction: row;
+    position:sticky;
+}
+
+nav#left{
+    background-color: var(--color2);
+    border-right: 1px solid var(--colorWrite);
+
+    position:sticky;
+    top: 0px;
+
+    padding: 5px;
+
+    height: 100vh;
+}
+
+#content{
+    flex-grow: 3;
+
+    padding: 20px;
+}
+
+nav#right{
+    background-color: var(--color3);
+    border-left: 1px solid var(--colorWrite);
+
+    position:sticky;
+    top: 0px;
+
+    padding: 5px;
+
+    height: 100vh;
+}

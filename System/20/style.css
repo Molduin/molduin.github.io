@@ -1,0 +1,9 @@
+@import url(../style.css);
+
+body{
+    background-color: #013220;
+}
+
+#main{
+    background-image: none;
+}

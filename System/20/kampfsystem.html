@@ -10,8 +10,9 @@
 
 		<nav>
 			<h2>Navigation</h2>
+			<a href="../index.html">Hauptseite</a>
+			<a href="magie.html">Magiesystem</a>
 			<a href="angriffsrechner.html">Angriffsrechner</a>
-			<a href="index.html">Hauptseite</a>
 		</nav>
 
 		<div id="main">
@@ -148,16 +149,21 @@
 							</p>
 						</div>
 						<div>
-							<h4>Angreifen (Wucht und Schnitt)</h4>
+							<h4>Grundwucht (GW) und Angriffswucht (AW)</h4>
 							<p>
 								Jedes Objekt hat eine Grundwucht (GW).
 								Dieser Wert gibt an, wie viele KP nötig sind, um mit diesem Objekt einen Angriff auszuführen
 								(ein Leitfaden für Wuchtwerte ist am Ende dieses Abschnitts zu finden).
-								Es ist möglich, pro Zug mehrere Angriffe auszuführen, wenn dafür genügend KP vorhanden sind.
+								Pro Angriff kann eine Anzahl an KP, die der GW der Waffe entspricht, effizient investiert werden;
+								für jeden so investierten KP steigt die Angriffswucht (AW) um 4.
+								Diejenigen KP, die investiert worden sind, um den Angriff überhaupt ausführen zu können, zählen nicht dazu.
+								Es ist möglich, weitere KP in den Angriff zu investieren.
+								Für jeden so investierten KP steigt die AW allerdings nur noch um 1.
+								Desweiteren ist es möglich, pro Zug mehrere Angriffe auszuführen, wenn dafür genügend KP vorhanden sind.
 								KP können allerdings auch benutzt werden, um Angriffe auf vielfältige Weise zu modifizieren (s.u.).
 								Welche Effekte ein Angriff haben soll, muss entschieden werden, bevor die Probe ausgeführt wird.
 								Nicht genutzte Kraftpunkte verfallen am Ende des Zugs.
-								Jegliche Verteidigung muss angekündigt werden, nachdem der Angreifer seine KP verteilt hat,
+								Jegliche Verteidigung (pareiren, blocken etc.) muss angekündigt werden, nachdem der Angreifer seine KP verteilt hat,
 								aber bevor die Angriffsprobe erfolgt. Diese erfolgt auf (Kk | Ge) + Waf + ggf. Modifikatoren.
 								Misslingt die Probe, verfehlt das Objekt sein Ziel und das Tempo verschiebt sich um 2 zu Ungunsten des Angreifers.
 							</p>
@@ -215,43 +221,48 @@
 										<th>Paradewert</th>
 									</tr>
 									<tr>
+										<td>Faust</td>
+										<td>0</td>
+										<td>-3</td>
+									</tr>
+									<tr>
 										<td>Dolch</td>
-										<td>4</td>
+										<td>2</td>
 										<td>0</td>
 									</tr>
 									<tr>
 										<td>Parierdolch</td>
-										<td>4</td>
+										<td>2</td>
 										<td>3</td>
 									</tr>
 									<tr>
 										<td>Rapier</td>
-										<td>5</td>
+										<td>3</td>
 										<td>5</td>
 									</tr>
 									<tr>
 										<td>Einhänder</td>
-										<td>6</td>
+										<td>4</td>
 										<td>2</td>
 									</tr>
 									<tr>
 										<td>Anderthalbhänder</td>
-										<td>8</td>
+										<td>5</td>
 										<td>1</td>
 									</tr>
 									<tr>
 										<td>Zweihänder</td>
-										<td>10</td>
+										<td>6</td>
 										<td>0</td>
 									</tr>
 									<tr>
 										<td>Axt</td>
-										<td>12</td>
+										<td>7</td>
 										<td>-2</td>
 									</tr>
 									<tr>
 										<td>Großer Hammer</td>
-										<td>14</td>
+										<td>8</td>
 										<td>-4</td>
 									</tr>
 								</table>
@@ -274,7 +285,8 @@
 						<div>
 							<h4>Blocken</h4>
 							<p>
-		
+								Das Blocken eines Angriffs mit einem Schild funktioniert wie eine Parade,
+								mit dem Unterschied, dass es bei einem Erfolg kein Tempo generiert.
 							</p>
 						</div>
 						<div>
