@@ -1,66 +1,231 @@
+@import url("https://fonts.googleapis.com/css?family=Almendra");
+@import url("https://fonts.googleapis.com/css?family=Crimson Text");
+
 :root{
     --color1: #07485b;
     --color2: #44075b;
     --color3: #5b1a07;
     --color4: #1e5b07;
     --colorWrite: #d7ae0d;
+    --colorBorder: #d7ae0d;
     /*--colorWrite: #eeeeee;*/
+
+    
+    --colorA1: #005208;
+    --colorA2: #005231;
+    --colorA3: #004a52;
+    --colorB1: #310052;
+    --colorB2: #520021;
+    --colorC1: #E9A316;
+
+    --background: #13001a;
+    --box: #06001A;
+    --green: #002010;
+    --yellow: #c0a000;
+
+    --idk: #035763;
 }
 
-/* MF (mobile first) design */
+/*
+Mobile first design 
+The smallest width we need to test for is probably around 320px, I suppose
+*/
 
 body{
-    background-color: var(--color1 );
-    color: var(--colorWrite);
-    font-size: 16pt;
     margin: 0px;
     display: flex;
     flex-direction: column;
+
+    font-family: "Crimson Text";
+
+    background-color: var(--background);
+    color: var(--yellow);
+}
+#title, h1, h2{
+    font-family: "Almendra";
 }
 
 #title{
     top: 0px;
-    width: 100%;
 
     text-align: center;
     justify-content: center;
+    padding: 10px;
 
-    background-color: var(--color4);
-    border-bottom: 1px solid var(--colorWrite);
+    border-bottom: 2px solid var(--colorBorder);
+
+    color: var(--yellow);
+    background-color: var(--green);
 }
 
-#main{
+a{
+    color: var(--yellow);
+    text-decoration: none;
+}
+a:hover{
+    color: var(--idk);
+    text-decoration: underline;
+}
+
+nav{
+    position: sticky;
+    top: 0px;
+    width: 100%;
+
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+
     display: flex;
     flex-direction: row;
-    position:sticky;
+
+    border-bottom: 2px solid var(--colorBorder);
+    background-color: var(--green);
 }
-
-nav#left{
-    background-color: var(--color2);
-    border-right: 1px solid var(--colorWrite);
-
-    position:sticky;
-    top: 0px;
-
-    padding: 5px;
-
-    height: 100vh;
+nav h2{
+    display: none;
+}
+nav>a{
+    font-size: 13pt;
+    padding: 2px 5px;
+    margin: 2px;
+    border: 2px solid var(--colorBorder);
+    border-radius: 10px;
 }
 
 #content{
-    flex-grow: 3;
-
-    padding: 20px;
+    color: white;
+    padding: 0 10px;
+    margin-bottom: 10px;
 }
 
-nav#right{
-    background-color: var(--color3);
-    border-left: 1px solid var(--colorWrite);
+.box{
+    padding: 10px;
+    border: 1px solid var(--colorBorder);
+    border-radius: 15px;
+    background-color: var(--box);
+    color: var(--yellow);
+}
 
-    position:sticky;
-    top: 0px;
+aside{
+    margin: 0px 10px;
+    padding: 10px;
+    border: 2px solid var(--yellow);
+    border-bottom: none;
+    border-radius: 15px 15px 0px 0px;
+    background-color: var(--green);
+}
 
-    padding: 5px;
+@media only screen and (min-width: 450px) {
+    body{
+        font-size: 13pt;
+    }
+}
 
-    height: 100vh;
+/*
+Adding nav bar
+*/
+@media only screen and (min-width: 550px) {
+    #title{
+        margin-left: 12px;
+        margin-right: 12px;
+
+        border: 3px solid var(--colorBorder);
+        border-top: none;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+
+    #mainInner{
+        display: flex;
+        flex-direction: row;
+    }
+
+    nav, #content{
+        margin: 12px;
+        padding: 10px;
+        border: 3px solid var(--colorBorder);
+        border-radius: 15px;
+    }
+    
+    nav{
+        position: sticky;
+        top: 12px;
+        min-width: calc(3em + 12vw);
+
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        padding: 5px;
+    
+        height: calc(100vh - 2*(12px + 5px + 3px));
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    nav a{
+        border: none;
+        white-space: wrap;
+    }
+
+    #content{
+        margin-left: 0px;
+        border-radius: 15px;
+    }
+    
+    aside{
+        border: 3px solid var(--colorBorder);
+        border-bottom: none;
+    }
+}
+
+@media only screen and (min-width: 800px){
+    body{
+        font-size: 14pt;
+    }
+}
+
+/*
+Adding context bar
+*/
+@media only screen and (min-width: 1000px){
+    #mainOuter{
+        display: flex;
+        flex-direction: row;
+    }
+    #content{
+        margin-right: 0px;
+    }
+    aside{
+        position: sticky;
+        top: 12px;
+        min-width: calc(3em + 12vw);
+
+        height: calc(100vh - 2*(12px + 5px + 3px));
+        overflow-y: scroll;
+        overflow-x: hidden;
+
+        margin: 12px;
+        padding: 5px;
+        border: 3px solid var(--colorBorder);
+        border-radius: 15px;
+    }
+}
+
+@media only screen and (min-width: 1300px){
+    #title{
+        margin: 0px 15px;
+    }
+    nav, aside{
+        margin: 15px;
+        top: 15px;
+        height: calc(100vh - 2*(15px + 5px + 3px));
+    }
+    
+    #content{
+        margin: 15px 0px;
+    }
 }
