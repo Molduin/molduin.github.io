@@ -6,8 +6,6 @@
 
 // import {jsSHA} from "./sha512";
 
-fetchFile("Files/index.txt");
-
 const typeSizes = {
     "undefined": () => 0,
     "boolean": () => 4,
@@ -20,14 +18,45 @@ const typeSizes = {
   
 const sizeOf = value => typeSizes[typeof value](value);
 
-const globalSalt = [177, 211, 123, 249, 2, 30, 164, 89, 87, 96, 24, 156, 216, 182, 206, 199];
-
 let ciphertext = encrypt("Hello, world!","hunter2");
 console.log(ciphertext); // Should be some byte salad
 let decrypted = encrypt(ciphertext, "hunter2");
 console.log(new TextDecoder().decode(decrypted)); // Should say "Hello, world!"
 
-//console.log("Hello");
+fetchFile("index.txt");
+let array = defaultHash("hunter2");
+console.log(array);
+array = toHexString(array);
+console.log(array);
+
+async function findAndLoad(password) {
+    const strings = (await fetchFile("index.txt")).split("\n");
+    password = assertUint8Array(password);
+    const passHash = defaultHash(password);
+    for (let i = 0; i < strings.length; i++) {
+        if (strings[i] === passHash) {
+            document.body.innerHTML = await readFile(passHash, password)
+            return;
+        }
+    }
+    window.location.href = "404.html";
+}
+
+async function readFile(path, key) {
+    const string = fetchFile(path);
+    return encrypt(string, key);
+}
+
+async function fetchFile(filename) {
+    try {
+        const response = await fetch(filename);
+
+        if (!response.ok) throw new Error('Failed to fetch document');
+        return await response.text();
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 /**
  * 
@@ -35,10 +64,8 @@ console.log(new TextDecoder().decode(decrypted)); // Should say "Hello, world!"
  * @param {(string|Uint8Array)} key - Encryption key or password
  */
 function encrypt(text, key) {
-    if(typeof text === "string") text = new TextEncoder().encode(text);
-    else if(!typeof text === "UInt8Array") throw new Error();
-    if(typeof key === "string") key = new TextEncoder().encode(key);
-    else if(!typeof key === "UInt8Array") throw new Error();
+    text = assertUint8Array(text);
+    key = assertUint8Array(key);
 
     // Might be larger than the text if the size of the text is not a multiple of 512 bits (64 bytes)
     let overlay = streamA(Math.ceil(text.length/64), key);
@@ -81,14 +108,28 @@ function encrypt(text, key) {
     }
 }
 
+function assertUint8Array(stringOrArray){
+    if(typeof stringOrArray === "string") stringOrArray = new TextEncoder("ASCII").encode(stringOrArray);
+    else if(!typeof stringOrArray === "UInt8Array") throw new Error();
+    return stringOrArray;
+}
+
+/**
+ * 
+ * @param {Uint8Array} input 
+ */
+function defaultHash(input) {
+    return multiHash(input, [2,1], 42)
+}
+
 function multiHash(input, iterationArray, iterations) {
     let output = input;
     for(let i = 0; i < iterations; i++){
+        let concatenate = false;
         for (let j = 0; j < iterationArray.length; j++) {
-            let concatenate = false;
             for (let k = 0; k < iterationArray[j]; k++) {
                 let shaObj = new jsSHA("SHA-512", "UINT8ARRAY");
-                if (concatenate) output = [...output, ...input];
+                if (concatenate === true) output = [...output, ...input];
                 output = shaObj.update(output).getHash("UINT8ARRAY");
             }
             concatenate = !concatenate;
@@ -97,15 +138,27 @@ function multiHash(input, iterationArray, iterations) {
     return output;
 }
 
-async function fetchFile(filename) {
-    try {
-        const response = await fetch(filename);
+function uint8ArrayToInt8Array(inputArray){
+    let outputArray = new Int8Array();
+}
 
-        if (!response.ok) throw new Error('Failed to fetch document');
-        let data = await response.text();
-        console.log(data);
-        return data;
-    } catch (error) {
-        console.error(error);
-    }
+function toHexString(byteArray) {
+    return Array.from(byteArray, function(byte) {
+        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+    }).join('')
+}
+
+/**
+ * @param {string} hexString 
+ */
+function fromHexString (hexString) {
+    console.log("Hex string: "+hexString);
+    return Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+}
+
+function _createFileData(text, key) {
+    const fileName = toHexString(new TextEncoder().encode(defaultHash(key)));
+    const content = encrypt(text, key);
+    console.log("Name of file:\n"+fileName);
+    console.log("Content:\n"+content);
 }

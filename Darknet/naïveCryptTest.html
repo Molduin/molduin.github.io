@@ -7,5 +7,49 @@
     </head>
     <body>
         <h1>For debugging purposes</h1>
+        <hr>
+        <input type="search" id="search">
+        <br>
+        <button id="open">Open with password</button>
+
+        <hr>
+
+        <label for="text">String (AS HEX!!!)</label>
+        <br>
+        <textarea id="text"></textarea>
+        <br>
+        <label for="password">Password</label>
+        <br>
+        <input type="text" id="password">
+        <br>
+        <button onclick="let bytes = fromHexString(document.getElementById('text').value);
+            document.getElementById('dummyPlain').innerText
+            = bytes;
+            let encryptedBytes = encrypt(bytes, document.getElementById('password').value);
+            document.getElementById('dummyNum').innerText
+            = encryptedBytes;
+            document.getElementById('dummyString').innerText
+            = toHexString(encryptedBytes);
+            let string = new TextDecoder('UTF-8').decode(encryptedBytes);
+            document.getElementById('dummyText').innerText
+            = string
+            document.getElementById('dummyRecover').innerText
+            = new TextEncoder('UTF-8').encode(string)">
+            Encrypt string</button>
+        <hr>
+        Hex string as bytes:
+        <div id="dummyPlain"></div>
+        <hr>
+        Encrypted bytes:
+        <div id="dummyNum"></div>
+        <hr>
+        Encrypted bytes in hex:
+        <div id="dummyString"></div>
+        <hr>
+        Encrypted bytes converted to UTF-8 string:
+        <div id="dummyText"></div>
+        <hr>
+        UTF-8 string converted back to bytes:
+        <div id="dummyRecover"></div>
     </body>
 </html>
