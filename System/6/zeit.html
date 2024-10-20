@@ -31,7 +31,6 @@
                         nehmen eine oder mehrere dieser Tageszeiten ein.
                     </p>
                     <p>
-                        Tabelle
                         <table>
                             <tr>
                                 <th>Nummer der Zeiteinheit im Spiel</th>
@@ -86,31 +85,65 @@
                     <p>
                         Das Namenlose System™ erlaubt es den Spielern, den Chronotypen ihres Charakters zu wählen.
                     </p>
-                    <p>
-                        Jeder Charakter erhält eine Anzahl an "Schlafwürfeln",
-                        die 10 plus der Anzahl seiner Willenswürfel entspricht.
-                        Diese kann er auf die 8 Tageszeiten verteilen,
-                        hierbei muss jedoch auf jede Tageszeit mindestens ein Schlafwürfel gesetzt sein.
-                        <br>
-                        Eine äquivalente Rechnung: Jeder Charakter erhält eine Anzahl an Schlafwürfeln,
-                        die 2 plus der Anzahl seiner Willenswürfel entspricht, und kann diese beliebig verteilen.
-                        Zusätzlich wird auf jede Tageszeit ein zusätzlicher Schlafwürfel gestezt.
-                    </p>
-                    <p>
-                        Schläft ein Charakter, so werden die Schlafwürfel, die auf die Zeiten, die er verschläft,
-                        gesetzt wurden, zusammengenommen und geworfen:
-                        Zeigt mindestens einer der Würfel eine 6, ist der Charakter ausgeschlafen.
-                    </p>
-                    <p>
-                        Die Bedingungen, unter denen ein Charakter schläft,
-                        können die Anzahl der Würfel, die geworfen werden, beeinflussen,
-                        indem Würfel insgesamt oder pro Zeiteinheit hunzugenommen oder abgezogen werden
-                        oder indem sie z.B. <a href="fertigkeiten.html">gesechstelt</a> werden.
-                    </p>
-                    <p>
-                        Für jede Zeiteinheit, die ein Charakter ununterbrochen wach ist, erhält er eine Anzahl "Müdigkeitswürfel",
-                        die der Anzahl an Schlafwürfeln auf dieser Zeiteinheit entspricht.
-                    </p>
+                    <div>
+                        <h3>Schlafwürfel</h3>
+                        <p>
+                            Jeder Charakter erhält eine Anzahl an "Schlafwürfeln",
+                            die 10 plus der Anzahl seiner Willenswürfel entspricht.
+                            Diese kann er auf die 8 Tageszeiten verteilen,
+                            hierbei muss jedoch auf jede Tageszeit mindestens ein Schlafwürfel gesetzt sein.
+                            <br>
+                            Eine äquivalente Rechnung: Jeder Charakter erhält eine Anzahl an Schlafwürfeln,
+                            die 2 plus der Anzahl seiner Willenswürfel entspricht, und kann diese beliebig verteilen.
+                            Zusätzlich wird auf jede Tageszeit ein zusätzlicher Schlafwürfel gestezt.
+                        </p>
+                    </div>
+                    <div>
+                        <h3>Müdigkeit</h3>
+                        <p>
+                            Für jede Zeiteinheit, die ein Charakter ununterbrochen wach ist, erhält er eine Anzahl "Müdigkeitswürfel" (MW),
+                            die der Anzahl an Schlafwürfeln auf dieser Zeiteinheit entspricht.
+                        </p>
+                        <p>
+                            Pro Zeiteinheit wird einmal auf (MW - (5+Res)) gewürfelt (sofern dieser Wert größer als 0 ist, versteht sich).
+                            Zeigt mindestens einer der geworfenen Würfel eine Sechs, schläft der betroffene Charakter ein.
+                            <br>
+                            Dieser Wurf muss nicht zwingend zwischen zwei Zeiteinheiten geschehen: Wann genau gewürfelt wird, entscheidet der SL.
+                        </p>
+                        <div>
+                            <h4>Mali bei Müdigkeit</h3>
+                            <p>
+                                Kommt noch
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Schlafen</h3>
+                        <p>
+                            Schläft ein Charakter, werden zuerst alle seine Müdigkeitswürfel geworfen
+                            und deren Ergebnisse zu einer Anzahl "Müdigkeitspunkte" aufaddiert.
+                            <br>
+                            Als Nächstes werden alle Schlafwürfel, die der Charakter auf die Tageszeiten gesetzt hat, die er verschläft,
+                            ebenfalls geworfen und die Summe ihrer Ergebnisse von den Müdigkeitspunkten abgezogen.
+                            Sinkt die Anzahl der Müdigkeitspunkte hierbei auf 0,
+                            wacht der Charakter vollständig ausgeschlafen, also ohne Müdigkeitswürfel, auf.
+                            <br>
+                            Wenn allerdings noch Müdigkeitspunkte übrig sind, wenn der Charakter aufwacht,
+                            wird ein Würfel so lange wiederholt geworfen, bis die Summe seiner Ergebnisse
+                            mindestens der Anzahl an Müdigkeitspunkten entspricht.
+                            Die Anzahl dieser Würfe gibt nun an, wie viele Müdigkeitswürfel der Charakter nach dem Aufwachen noch hat.
+                        </p>
+                        <p class="footnote">
+                            Mit etwas Unglück ist es demzufolge möglich (wenn auch unwahrscheinlich),
+                            dass ein Charakter nach dem Aufwachen noch mehr Müdigkeitswürfel hat als zuvor. Dies ist so gewollt.
+                        </p>
+                        <p>
+                            Die Bedingungen, unter denen ein Charakter schläft,
+                            können die Anzahl der Würfel, die geworfen werden, beeinflussen,
+                            indem Würfel insgesamt oder pro Zeiteinheit hunzugenommen oder abgezogen werden
+                            oder indem sie z.B. <a href="fertigkeiten.html">gesechstelt</a> werden.
+                        </p>
+                    </div>
                 </div>
 				<hr>
 				<div id="next">
