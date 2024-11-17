@@ -35,13 +35,15 @@ body{
     margin: 0px;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 
     font-family: "Crimson Text";
 
     background-color: var(--background);
     color: var(--yellow);
+
 }
-#title, h1, h2{
+#title, h1, h2, h3{
     font-family: "Almendra";
 }
 
@@ -96,10 +98,25 @@ nav>a{
     border-radius: 10px;
 }
 
+aside>*{
+    margin: 2px;
+}
+
+/* Need these two so aside is positioned at the bottom of the screen on mobile even if the page is smaller than the screen */
+#mainOuter{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+#mainInner{
+    flex-grow: 1;
+}
+
 #content{
     color: white;
     padding: 0 10px;
     margin-bottom: 10px;
+    flex-grow: 1;
 }
 
 .box{
@@ -155,6 +172,8 @@ Adding nav bar
         position: sticky;
         top: 12px;
         min-width: calc(3em + 12vw);
+        max-width: 20vw;
+        flex-basis: 0;
 
         display: flex;
         flex-direction: column;
@@ -162,7 +181,7 @@ Adding nav bar
 
         padding: 5px;
     
-        height: calc(100vh - 2*(12px + 5px + 3px));
+        max-height: calc(100vh - 2*(12px + 5px + 3px));
         overflow-y: scroll;
         overflow-x: hidden;
     }
@@ -203,8 +222,10 @@ Adding context bar
         position: sticky;
         top: 12px;
         min-width: calc(3em + 12vw);
+        max-width: 20vw;
+        flex-basis: 0;
 
-        height: calc(100vh - 2*(12px + 5px + 3px));
+        max-height: calc(100vh - 2*(12px + 5px + 3px));
         overflow-y: scroll;
         overflow-x: hidden;
 
@@ -212,6 +233,9 @@ Adding context bar
         padding: 5px;
         border: 3px solid var(--colorBorder);
         border-radius: 15px;
+    }
+    aside>*{
+        margin: 5px;
     }
 }
 
@@ -222,7 +246,7 @@ Adding context bar
     nav, aside{
         margin: 15px;
         top: 15px;
-        height: calc(100vh - 2*(15px + 5px + 3px));
+        max-height: calc(100vh - 2*(15px + 5px + 3px));
     }
     
     #content{

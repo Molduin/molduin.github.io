@@ -2,54 +2,60 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../style.css">
         <script src="sha512.js"></script>
         <script src="naïveCrypt.js"></script>
     </head>
     <body>
-        <h1>For debugging purposes</h1>
-        <hr>
-        <input type="search" id="search">
-        <br>
-        <button id="open">Open with password</button>
+        <div id="title">
+			<h1>File finder / decryptor / encryptor</h1>
+		</div>
 
-        <hr>
+        <div id="mainOuter">
 
-        <label for="text">String (AS HEX!!!)</label>
-        <br>
-        <textarea id="text"></textarea>
-        <br>
-        <label for="password">Password</label>
-        <br>
-        <input type="text" id="password">
-        <br>
-        <button onclick="let bytes = fromHexString(document.getElementById('text').value);
-            document.getElementById('dummyPlain').innerText
-            = bytes;
-            let encryptedBytes = encrypt(bytes, document.getElementById('password').value);
-            document.getElementById('dummyNum').innerText
-            = encryptedBytes;
-            document.getElementById('dummyString').innerText
-            = toHexString(encryptedBytes);
-            let string = new TextDecoder('UTF-8').decode(encryptedBytes);
-            document.getElementById('dummyText').innerText
-            = string
-            document.getElementById('dummyRecover').innerText
-            = new TextEncoder('UTF-8').encode(string)">
-            Encrypt string</button>
-        <hr>
-        Hex string as bytes:
-        <div id="dummyPlain"></div>
-        <hr>
-        Encrypted bytes:
-        <div id="dummyNum"></div>
-        <hr>
-        Encrypted bytes in hex:
-        <div id="dummyString"></div>
-        <hr>
-        Encrypted bytes converted to UTF-8 string:
-        <div id="dummyText"></div>
-        <hr>
-        UTF-8 string converted back to bytes:
-        <div id="dummyRecover"></div>
+			<div id="mainInner">
+
+                <nav>
+					<h2>Navigation</h2>
+					<a href=>Link</a>
+					<a href=>Link</a>
+					<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Link</a>
+				</nav>
+
+                <div id="content">
+                    <div class="box">
+                        <h2>Find, decrypt and view existing file automatically</h2>
+                        <p>Not yet functional</p>
+                        <input type="search" id="search">
+                        <br>
+                        <button id="open">Find and open with password</button>
+                    </div>
+
+                    <div class="box">
+                        <h2>Manual file encryption / decryption</h2>
+                        <label for="fileInput">Input file to encrypt/decrypt here</label>
+                        <br>
+                        <input id="fileInput" type="file" />
+                        <br>
+                        <label for="filePassword">Encryption/decryption password for file (UTF-8)...</label>
+                        <br>
+                        <input type="text" id="filePassword">
+                        <br>
+                        <button id="download" onclick="encryptAndDownloadFile()">Encrypt/decrypt and download file...</button>
+                    </div>
+                    
+
+                </div>
+
+            </div>
+
+            <aside>
+				<h3>What is this?</h3>
+				<p>Coming soon...</p>
+			</aside>	
+
+        </div>
+
     </body>
 </html>
