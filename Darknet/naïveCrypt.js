@@ -18,17 +18,9 @@ const typeSizes = {
   
 const sizeOf = value => typeSizes[typeof value](value);
 
-let ciphertext = encrypt("Hello, world!","hunter2");
-console.log(ciphertext); // Should be some byte salad
-let decrypted = encrypt(ciphertext, "hunter2");
-console.log(new TextDecoder().decode(decrypted)); // Should say "Hello, world!"
-
-fetchFile("index.txt");
-let array = defaultHash("hunter2");
-console.log(array);
-array = toHexString(array);
-console.log(array);
-
+/* let shaObj = new jsSHA("SHA-512", "TEXT");
+output = shaObj.update("test").getHash("HEX");
+console.log(output); */
 
 // Encrypting utilities
 function encryptAndDownloadFile(){
@@ -87,7 +79,7 @@ async function fetchFile(filename) {
     try {
         const response = await fetch(filename);
 
-        if (!response.ok) throw new Error('Failed to fetch document');
+        if (!response.ok) throw new Error('Failed to fetch '+filename);
         return await response.text();
     } catch (error) {
         console.error(error);
@@ -164,6 +156,7 @@ function defaultHash(input) {
     return multiHash(input, [2,1], 42)
 }
 
+// Used to quickly find the right file for a password
 function multiHash(input, iterationArray, iterations) {
     let output = input;
     for(let i = 0; i < iterations; i++){
