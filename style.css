@@ -133,9 +133,26 @@ button{
     color: var(--yellow);
     background-color: var(--green);
     border-color: var(--yellow);
+    font-family: "Crimson Text";
+    font-size: 12pt;
 }
 button:hover{
     background-color: var(--colorB2);
+}
+
+summary{
+    font-size: 16pt;
+    font-family: "Almendra";
+}
+
+table, th, td{
+    border: 1px solid var(--yellow);
+}
+table{
+    border-collapse: collapse;
+}
+th, td{
+    padding: 5px;
 }
 
 aside{
@@ -148,6 +165,9 @@ aside{
 }
 aside>*{
     margin: 2px;
+}
+aside h2{
+    font-size: 16pt;
 }
 
 @media only screen and (min-width: 450px) {
@@ -223,6 +243,9 @@ Adding nav bar
         border: 3px solid var(--colorBorder);
         border-bottom: none;
     }
+    aside h2{
+        font-size: 16pt;
+    }
 }
 
 @media only screen and (min-width: 800px){
@@ -272,7 +295,11 @@ Adding context bar
         top: 15px;
         max-height: calc(100vh - 2*(15px + 5px + 3px));
     }
-    nav>h2{
+    nav h2{
+        font-size: 20pt;
+    }
+
+    aside h2{
         font-size: 20pt;
     }
     
