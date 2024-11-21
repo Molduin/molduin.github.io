@@ -57,37 +57,34 @@ async function findAndLoad(password) {
     const passHash = toHexString(defaultHash(password));
     const filePath = "Files/"+passHash;
     console.log("filePath: "+filePath);
-    try {
-        const content = await readFile(filePath, password);
-        console.log("[findAndLoad] File content: "+content); // OK
-        downloadFile("file", content);
-    } catch (e) {
-        console.error(e);
+    if(!await fileExists(filePath)){
+        alert("Incorrect password!");
+        return;
     }
+    const content = await readFile(filePath, password);
     downloadFile("file", content);
 }
 
 async function readFile(path, key) {
     const string = await fetchFile(path);
-    console.log("[readFile]: File content:"); // OK
-    console.log(string);
     const decrypted = encrypt(string, key);
-    console.log("[readFile]: Decrypted file content:"); // OK
-    console.log(decrypted);
     return decrypted;
 }
 
 async function fetchFile(filename) {
-    console.log("Fetching File: "+filename)
-    try {
-        const response = await fetch(filename);
+    const response = await fetch(filename);
+    if (!response.ok) throw new Error('Failed to fetch '+filename);
+    var buf = await response.arrayBuffer();
+    return new Uint8Array(buf); // OK
+}
 
-        if (!response.ok) throw new Error('Failed to fetch '+filename);
-        //console.log("[fetchFile] Content: "+await response.text())
-        var buf = await response.arrayBuffer();
-        return new Uint8Array(buf); // OK
-    } catch (error) {
-        console.error(error);
+async function fileExists(path) {
+    try {
+        const response = await fetch(path, { method: 'HEAD' });
+        return response.ok;
+    } catch (err) {
+        console.error('An error occurred:', err);
+        return false;
     }
 }
 
@@ -97,11 +94,7 @@ async function fetchFile(filename) {
  * @param {(string|Uint8Array)} key - Encryption key or password
  */
 function encrypt(text, key) {
-    console.log("Encrypting "+text);
     text = assertUint8Array(text);
-    console.log("In bytes: ");
-    console.log(text);
-
     key = assertUint8Array(key);
 
     /*  Extra security measure so you don't have to change the password when editing a file in case its length has changed
@@ -113,9 +106,6 @@ function encrypt(text, key) {
     // Might be larger than the text if the size of the text is not a multiple of 512 bits (64 bytes)
     let overlay = streamA(Math.ceil(text.length/64), key);
     let ciphertext = xor(text, overlay, text.length);
-
-    console.log("Ciphertext:");
-    console.log(ciphertext);
 
     return ciphertext;
 
