@@ -18,10 +18,6 @@ const typeSizes = {
   
 const sizeOf = value => typeSizes[typeof value](value);
 
-/* let shaObj = new jsSHA("SHA-512", "TEXT");
-output = shaObj.update("test").getHash("HEX");
-console.log(output); */
-
 // Encrypting utilities
 function encryptAndDownloadFile(){
     const file = document.getElementById("fileInput").files[0];
@@ -54,33 +50,42 @@ function downloadFile(name, data) {
     }));
     a.dispatchEvent(new MouseEvent("click"));
 }
-//downloadFile("download.txt", ia);
 
 // Decrypting utilities
 async function findAndLoad(password) {
-    const strings = (await fetchFile("index.txt")).split("\n");
     password = assertUint8Array(password);
-    const passHash = defaultHash(password);
-    for (let i = 0; i < strings.length; i++) {
-        if (strings[i] === passHash) {
-            document.body.innerHTML = await readFile(passHash, password)
-            return;
-        }
+    const passHash = toHexString(defaultHash(password));
+    const filePath = "Files/"+passHash;
+    console.log("filePath: "+filePath);
+    try {
+        const content = await readFile(filePath, password);
+        console.log("[findAndLoad] File content: "+content); // OK
+        downloadFile("file", content);
+    } catch (e) {
+        console.error(e);
     }
-    window.location.href = "404.html";
+    downloadFile("file", content);
 }
 
 async function readFile(path, key) {
-    const string = fetchFile(path);
-    return encrypt(string, key);
+    const string = await fetchFile(path);
+    console.log("[readFile]: File content:"); // OK
+    console.log(string);
+    const decrypted = encrypt(string, key);
+    console.log("[readFile]: Decrypted file content:"); // OK
+    console.log(decrypted);
+    return decrypted;
 }
 
 async function fetchFile(filename) {
+    console.log("Fetching File: "+filename)
     try {
         const response = await fetch(filename);
 
         if (!response.ok) throw new Error('Failed to fetch '+filename);
-        return await response.text();
+        //console.log("[fetchFile] Content: "+await response.text())
+        var buf = await response.arrayBuffer();
+        return new Uint8Array(buf); // OK
     } catch (error) {
         console.error(error);
     }
@@ -92,18 +97,25 @@ async function fetchFile(filename) {
  * @param {(string|Uint8Array)} key - Encryption key or password
  */
 function encrypt(text, key) {
+    console.log("Encrypting "+text);
     text = assertUint8Array(text);
+    console.log("In bytes: ");
+    console.log(text);
+
+    key = assertUint8Array(key);
 
     /*  Extra security measure so you don't have to change the password when editing a file in case its length has changed
         (which it probably has if you have made any substantial edits).
         This way, we avoid encrypting two different blocks of plaintext (the original one, and the changed one)
         using the same part of the overlay. */
-    key = key + text.length;
-    key = assertUint8Array(key);
+    key = [...key, ...numToUint8Array(text.length)];
 
     // Might be larger than the text if the size of the text is not a multiple of 512 bits (64 bytes)
     let overlay = streamA(Math.ceil(text.length/64), key);
     let ciphertext = xor(text, overlay, text.length);
+
+    console.log("Ciphertext:");
+    console.log(ciphertext);
 
     return ciphertext;
 
@@ -185,4 +197,15 @@ function toHexString(byteArray) {
 function fromHexString (hexString) {
     console.log("Hex string: "+hexString);
     return Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+}
+
+function numToUint8Array(num) {
+    let arr = new Uint8Array(8);
+  
+    for (let i = 0; i < 8; i++) {
+      arr[i] = num % 256;
+      num = Math.floor(num / 256);
+    }
+  
+    return arr;
 }
