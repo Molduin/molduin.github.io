@@ -62,7 +62,8 @@ async function findAndLoad(password) {
         return;
     }
     const content = await readFile(filePath, password);
-    downloadFile("file", content);
+    // Content is not supposed to include <!DOCTYPE html> and <html></html>.
+    document.querySelector("html").innerHTML = new TextDecoder("UTF-8").decode(content);
 }
 
 async function readFile(path, key) {
