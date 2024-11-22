@@ -24,6 +24,14 @@ body{
     font-family: 'Artifika';
 }
 
+#background{
+    background-image: linear-gradient(to right, #013220, #380000);
+    position: fixed;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+}
+
 #title{
     position: sticky;
     top: 0px;
@@ -46,7 +54,6 @@ nav{
 
 #main{
     min-height: 100vh;
-    background-image: linear-gradient(to right, #013220, #380000);
 }
 
 #content{
