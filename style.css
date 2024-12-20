@@ -1,3 +1,8 @@
+/*  DESIGN GUIDELINES
+    Always prefer gap over margin
+    If margin has to be used, always set it on the outermost element possible
+*/
+
 @import url("https://fonts.googleapis.com/css?family=Almendra");
 @import url("https://fonts.googleapis.com/css?family=Crimson Text");
 
@@ -30,7 +35,6 @@
 Mobile first design 
 The smallest width we need to test for is probably around 320px, I suppose
 */
-
 body{
     margin: 0px;
     display: flex;
@@ -38,6 +42,7 @@ body{
     min-height: 100vh;
 
     font-family: "Crimson Text";
+    font-size: 12pt;
 
     background-color: var(--background);
     color: var(--yellow);
@@ -47,13 +52,11 @@ body{
 }
 
 #title{
-    top: 0px;
-
     text-align: center;
     justify-content: center;
     padding: 10px;
 
-    border-bottom: 2px solid var(--colorBorder);
+    border-bottom: 2px solid var(--yellow);
 
     color: var(--yellow);
     background-color: var(--green);
@@ -83,7 +86,7 @@ nav{
     display: flex;
     flex-direction: row;
 
-    border-bottom: 2px solid var(--colorBorder);
+    border-bottom: 2px solid var(--yellow);
     background-color: var(--green);
 }
 nav h2{
@@ -93,11 +96,11 @@ nav>a{
     font-size: 13pt;
     padding: 2px 5px;
     margin: 2px;
-    border: 2px solid var(--colorBorder);
+    border: 2px solid var(--yellow);
     border-radius: 10px;
 }
 
-/* Need these two so aside is positioned at the bottom of the screen on mobile even if the page is smaller than the screen */
+/* Need these three so aside is positioned at the bottom of the screen on mobile even if the page is smaller than the screen */
 #mainOuter{
     flex-grow: 1;
     display: flex;
@@ -105,10 +108,13 @@ nav>a{
 }
 #mainInner{
     flex-grow: 1;
+    margin: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 #content{ /* Content column is now invisible */
-    margin-bottom: 10px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -117,13 +123,12 @@ nav>a{
 
 /* Boxes inside of the main content column */
 .box{
-    color: white;
-    padding: 0 10px;
+    color: #eeeeee;
 }
 
 .infobox{
     padding: 10px;
-    border: 1px solid var(--colorBorder);
+    border: 1px solid var(--yellow);
     border-radius: 15px;
     background-color: var(--infobox);
     color: var(--yellow);
@@ -155,8 +160,11 @@ th, td{
     padding: 5px;
 }
 
+li{
+    margin: 5px 0px;
+}
+
 aside{
-    margin: 0px 10px;
     padding: 10px;
     border: 2px solid var(--yellow);
     border-bottom: none;
@@ -184,19 +192,25 @@ Adding nav bar
         margin-left: 12px;
         margin-right: 12px;
 
-        border: 3px solid var(--colorBorder);
+        border: 3px solid var(--yellow);
         border-top: none;
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
     }
 
-    #mainInner{
+    #mainOuter{
         display: flex;
         flex-direction: row;
+        margin: 12px;
+        margin-bottom: 0px;
+        gap: 12px;
+    }
+    #mainInner{
+        margin: 0px;
+        gap: 12px;
     }
 
     nav, #content{
-        margin: 12px;
         gap: 12px;
     }
     
@@ -217,7 +231,7 @@ Adding nav bar
         overflow-y: scroll;
         overflow-x: hidden;
 
-        border: 3px solid var(--colorBorder);
+        border: 3px solid var(--yellow);
         border-radius: 15px;
     }
     nav a{
@@ -229,18 +243,15 @@ Adding nav bar
         font-size: 16pt;
     }
 
-    #content{
-        margin-left: 0px;
-    }
-
     .box{
         padding: 10px;
-        border: 3px solid var(--colorBorder);
+        border: 3px solid var(--yellow);
         border-radius: 15px;
+        flex-grow: 2;
     }
     
     aside{
-        border: 3px solid var(--colorBorder);
+        border: 3px solid var(--yellow);
         border-bottom: none;
     }
     aside h2{
@@ -252,6 +263,9 @@ Adding nav bar
     body{
         font-size: 14pt;
     }
+    button{
+        font-size: 14pt;
+    }
 }
 
 /*
@@ -259,11 +273,11 @@ Adding context bar
 */
 @media only screen and (min-width: 1000px){
     #mainOuter{
+        margin: 12px;
+    }
+    #mainInner{
         display: flex;
         flex-direction: row;
-    }
-    #content{
-        margin-right: 0px;
     }
     aside{
         position: sticky;
@@ -276,22 +290,34 @@ Adding context bar
         overflow-y: scroll;
         overflow-x: hidden;
 
-        margin: 12px;
+        margin: 0px;
         padding: 5px;
-        border: 3px solid var(--colorBorder);
+        border: 3px solid var(--yellow);
         border-radius: 15px;
     }
     aside>*{
         margin: 5px;
     }
+    aside>h2, aside>h3{
+        text-align: center;
+    }
 }
 
 @media only screen and (min-width: 1300px){
+    body{
+        font-size: 15pt;
+    }
     #title{
         margin: 0px 15px;
     }
-    nav, aside{
+    #mainOuter{
         margin: 15px;
+        gap: 15px;
+    }
+    #mainInner{
+        gap: 15px;
+    }
+    nav, aside{
         top: 15px;
         max-height: calc(100vh - 2*(15px + 5px + 3px));
     }
@@ -304,7 +330,9 @@ Adding context bar
     }
     
     #content{
-        margin: 15px 0px;
         gap: 15px;
+    }
+    .box{
+        padding: 15px;
     }
 }

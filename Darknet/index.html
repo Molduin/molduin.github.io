@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="sha512.js"></script>
+        <script src="naïveCrypt.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Almendra' rel='stylesheet'>
+		<link href='https://fonts.googleapis.com/css?family=Charm' rel='stylesheet'>
+	</head>
+	<body>
+		<div id="main">
+			<h1>Looking for something?</h1>
+			<p>Do you have what it takes?</p>
+			<form>
+				<input type="password" id="search" placeholder="O seeker, what do you seek?"> <br>
+				<button id="open" type="submit" onclick="findAndLoad(document.getElementById('search').value)">Find out</button>
+			</form>
+		</div>
+		<div id="footnote">
+			<a href="fileEncryptor.html">Learn more</a>
+		</div>
+	</body>
+</html>
+<style>
+	html *{
+		margin: 0px;
+		color: #c0a000;
+	}
+	body{
+		background-color: #13001a;
+		margin: 0px;
+		width: 100vw;
+		height: 100vh;
+		background-image: radial-gradient(#035763, #13001a);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	body *{
+		text-align: center;
+		font-family: "Almendra";
+	}
+	#main{
+		transform: translate(0,-50px);
+	}
+	#main *{
+		margin: 10px;
+		font-size: 18pt;
+	}
+	#main h1{
+		font-size: 36pt;
+	}
+	#search{
+		color: #83708a;
+		min-width: 300px;
+		font-family: "Charm";
+	}
+	#search:active, #search:focus {
+		outline-color: #83708a;
+		outline-style: solid;
+		outline-width: 3px;
+	}
+	#open{
+		color: #13001a;
+		display: none;
+	}
+	#footnote{
+		position:absolute;
+		bottom: 5px;
+		width: 100%;
+		text-align: center;
+	}
+	a{
+		padding: 5px;
+		margin: -5px;
+	}
+	a:hover{
+		color: #af2303;
+	}
+
+	@media (hover: none) {
+  		#open{
+			display: inline;
+		}
+	}
+
+</style>

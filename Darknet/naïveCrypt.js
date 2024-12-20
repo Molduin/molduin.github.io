@@ -1,10 +1,11 @@
 /**
  * Using any of the algorithms implemented here is discouraged.
- * They are probably insecure and are intended for educational/learning purposes only.
- * I have little idea what I am doing.
+ * Even though they are *probably* secure (if you know what you are doing),
+ * they are intended for learning purposes only, and are probably ridiculously inefficient.
+ * I do not have any formal education in the field of cryptography.
+ * 
+ * That said, I still trust this algorithm enough to potentially hide some stuff behind it.
  */
-
-// import {jsSHA} from "./sha512";
 
 const typeSizes = {
     "undefined": () => 0,
@@ -19,9 +20,10 @@ const typeSizes = {
 const sizeOf = value => typeSizes[typeof value](value);
 
 // Encrypting utilities
-function encryptAndDownloadFile(){
-    const file = document.getElementById("fileInput").files[0];
-    const encryptedFileName = "ENCRYPTED_" + file.name.toString();
+function encryptAndDownloadFile(useHash){
+    const files = document.getElementById("fileInput").files;
+    if(files.length == 0) return;
+    const file = files[0];
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
     reader.addEventListener("loadend", () => {
@@ -32,13 +34,19 @@ function encryptAndDownloadFile(){
             return;
         }
         const data = new Uint8Array(reader.result);
-        console.log(data);
-        console.log("Encrypting with password: "+pwd);
         const encryptedData = encrypt(data, pwd);
-        console.log(encryptedData);
-        const passHash = toHexString(defaultHash(assertUint8Array(pwd)));
-        console.log(passHash);
-        downloadFile(passHash, encryptedData);
+        if(useHash){
+            const passHash = toHexString(defaultHash(assertUint8Array(pwd)));
+            downloadFile(passHash, encryptedData);
+        } else {
+            const name = file.name.toString();
+            if(name.lastIndexOf("ENCRYPTED_",0)===0) {
+                var encryptedFileName = name.substr(10); // Mhh I love var scoping
+            } else {
+                var encryptedFileName = "ENCRYPTED_" + file.name.toString();
+            }
+            downloadFile(encryptedFileName, encryptedData);
+        }
     })
 }
 
@@ -186,7 +194,6 @@ function toHexString(byteArray) {
  * @param {string} hexString 
  */
 function fromHexString (hexString) {
-    console.log("Hex string: "+hexString);
     return Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
 }
 
