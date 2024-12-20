@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>File Encryptor</title>
         <link rel="stylesheet" href="../style.css">
         <script defer src="sha512.js"></script>
         <script defer src="naïveCrypt.js"></script>
@@ -131,7 +132,10 @@
                         <form>
                             <input type="password" id="search">
                             <br>
-                            <button id="open" type="submit" onclick="findAndLoad(document.getElementById('search').value)">Find and open with password</button>
+                            <button id="open" type="submit" onclick=
+                                "findAndLoad(document.getElementById('search').value); return false;">
+                                Find and open with password
+                            </button>
                         </form>
                     </div>
 
