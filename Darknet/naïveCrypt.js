@@ -122,11 +122,12 @@ function encrypt(text, key) {
 
     function streamA(amountOfBlocks, key){
         let allBlocks = new Uint8Array();
+        allBlocks = [...allBlocks];
 
         let currentBlock = new Uint8Array(64);
         for(let i = 0; i < amountOfBlocks; i++){
             currentBlock = generateBlock(currentBlock, key);
-            allBlocks = [...allBlocks, ...currentBlock];
+            allBlocks.push(...currentBlock);
         }
 
         function generateBlock(lastBlock, key) {
