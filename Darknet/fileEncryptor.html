@@ -68,12 +68,8 @@
                             This way, I can keep using the same password for a file after having edited it.
                         </p>
                         <p>
-                            In the same vein, I could also concatenate the password with the plaintext itself
-                            and then hash it once before passing it to the key generating function,
-                            which would be more secure on the off-chance that the length of the plaintext hasn't
-                            changed after editing it. However, I have concerns regarding the performance
-                            of hashing (potentially) several megabytes of data in JavaScript.
-                            Nontheless, it is something to try.
+                            In the same vein, I could instead use a random salt which won't be encrypted,
+                            which would cover the few cases in which the length of the file doesn't change after editing the plaintext.
                         </p>
                         <p class="infobox">
                             Yes, you <i>could</i> use this page as a personal file encryption and decryption tool,
@@ -84,24 +80,24 @@
                         <h2>Future Considerations</h2>
                         <ul>
                             <li>
-                                As mentioned, I might change the algorithm to take into account all of the plaintext,
-                                not just its length.
+                                As mentioned, I might include a random salt in encrypted files,
+                                as well as (though I don't necessarily see a use for this just yet)
+                                a utility to choose that salt manually while encrypting.
                             </li>
                             <li>
-                                Encrypting and decrypting large files currently seems to be quite slow,
-                                which might be due to the fact that the encryption algorithm is written in JavaScript.
-                                However, performance is not a main concern since the algorithm is only run once per page visit.
-                                If performance becomes too much of an issue, I could potentially try
-                                re-writing it in another language using WebAssembly.
-                                <br>
-                                Edit: My implementation was just very bad.
-                                I changed two lines of code and now the algorithm <i>actually</i> runs in linear time
-                            </li>
-                            <li>
-                                I might also add the functionality of the Hub to the navigation bar on each page,
+                                I might add the functionality of the Hub to the navigation bar on each page,
                                 but that would require importing all of the file finding code to those pages.
                                 However, the effect this would have on the site's performance is probably
                                 laughably small.
+                            </li>
+                            <li>
+                                Encrypting and decrypting large files currently seems to be quite slow,
+                                taking a little more than one second per megabyte on my machine.
+                                This might be due to the fact that the encryption algorithm is written in JavaScript.
+                                However, performance is not a main concern since the algorithm is only run once per page visit,
+                                not to mention that the size of the files decrypted will probably stay way under a megabyte.
+                                If performance does become an issue, I could potentially try
+                                re-writing the algorithm in another language using WebAssembly.
                             </li>
                         </ul>
                     </div>
@@ -123,12 +119,14 @@
                             <input type="password" id="filePassword">
                             <br>
                             <button id="download" type="submit" onclick=
-                                "encryptAndDownloadFile(document.getElementById('useHash').checked)">
+                                "encryptAndDownloadFile(document.getElementById('useHash').checked); return false;">
                                 Encrypt/decrypt and download file...
                             </button>
                             <br>
                             <input id="useHash" type="checkbox">
                             <label for="useHash">Rename file to confirmation hash</label>
+                            <input id="cullHead" type="checkbox">
+                            <label for="cullHead">Cull Head</label>
                         </form>
 
                         <h2>Find, decrypt and view existing file automatically</h2>

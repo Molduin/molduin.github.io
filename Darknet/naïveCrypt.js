@@ -71,7 +71,9 @@ async function findAndLoad(password) {
     }
     const content = await readFile(filePath, password);
     // Content is not supposed to include <!DOCTYPE html> and <html></html>.
-    document.querySelector("html").innerHTML = new TextDecoder("UTF-8").decode(content);
+    document.querySelector("html").innerHTML
+        = //"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>" + // </title></head>
+        new TextDecoder("UTF-8").decode(content);
 }
 
 async function readFile(path, key) {
@@ -131,7 +133,7 @@ function encrypt(text, key) {
         }
 
         function generateBlock(lastBlock, key) {
-            return (new jsSHA("SHA-512", "UINT8ARRAY").update([...lastBlock, ...key]).getHash("UINT8ARRAY"));
+            return (new jsSHA("SHA-512", "UINT8ARRAY").update(lastBlock).update(key).getHash("UINT8ARRAY"));
         }
 
         return allBlocks;
