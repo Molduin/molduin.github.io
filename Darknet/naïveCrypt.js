@@ -20,23 +20,29 @@ const typeSizes = {
 const sizeOf = value => typeSizes[typeof value](value);
 
 // Encrypting utilities
-function encryptAndDownloadFile(useHash){
-    const files = document.getElementById("fileInput").files;
-    if(files.length == 0) return;
+function encryptAndDownloadFile(files, password, useHash){
+    if(files.length == 0) {
+        alert("No files provided.");
+        return;
+    }
+    if(password == "" || password == null) {
+        console.log("Encrypting failed. You must provide a password.")
+        alert("Encrypting failed. You must provide a password.");
+        return;
+    }
     const file = files[0];
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
     reader.addEventListener("loadend", () => {
-        const pwd = document.getElementById("filePassword").value;
-        if(pwd == "" || pwd == null) {
+        if(password == "" || password == null) {
             console.log("Encrypting failed. You must provide a password.")
             alert("Encrypting failed. You must provide a password.");
             return;
         }
         const data = new Uint8Array(reader.result);
-        const encryptedData = encrypt(data, pwd);
+        const encryptedData = encrypt(data, password);
         if(useHash){
-            const passHash = toHexString(defaultHash(assertUint8Array(pwd)));
+            const passHash = toHexString(defaultHash(assertUint8Array(password)));
             downloadFile(passHash, encryptedData);
         } else {
             const name = file.name.toString();
@@ -59,8 +65,12 @@ function downloadFile(name, data) {
     a.dispatchEvent(new MouseEvent("click"));
 }
 
-// Decrypting utilities
-async function findAndLoad(password) {
+// DECRYPTING UTILITIES
+
+async function findAndLoad(password, useDomain) {
+    if (useDomain == true)
+        password = prependDomainIfExists(password);
+    console.log("Full password: "+password);
     password = assertUint8Array(password);
     const passHash = toHexString(defaultHash(password));
     const filePath = "Files/"+passHash;
@@ -74,6 +84,18 @@ async function findAndLoad(password) {
     document.querySelector("html").innerHTML
         = //"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>" + // </title></head>
         new TextDecoder("UTF-8").decode(content);
+}
+
+function prependDomainIfExists(password) {
+    const domainElement = document.getElementById('domain');
+    if (domainElement == null) return password;
+    return domainConcat(domainElement.innerText, password);
+}
+
+function domainConcat(domain, password){
+    console.log("domainConcat: domain: "+domain+"password: "+password);
+    if (domain === "" || domain == null || domain == undefined) return password;
+    return domain + "/" + password;
 }
 
 async function readFile(path, key) {

@@ -114,12 +114,26 @@
                         <form>
                             <input id="fileInput" type="file" />
                             <br>
+                            <label for="fileDomain">Domain (to people who are not me: You can leave this empty)</label>
+                            <br>
+                            <input type="password" id="fileDomain" style="min-width: 40%">
+                            <input id="showDomainText" type="checkbox" onclick="
+                                document.getElementById('fileDomain').type=this.checked?'text':'password'">
+                            <label for="showDomainText">Show Text</label>
+                            <br>
                             <label for="filePassword">Encryption/decryption password for file (UTF-8)...</label>
                             <br>
-                            <input type="password" id="filePassword">
+                            <input type="password" id="filePassword" style="min-width: 40%">
+                            <input id="showText" type="checkbox" onclick="
+                                document.getElementById('filePassword').type=this.checked?'text':'password'">
+                            <label for="showText">Show Text</label>
                             <br>
-                            <button id="download" type="submit" onclick=
-                                "encryptAndDownloadFile(document.getElementById('useHash').checked); return false;">
+                            <button id="download" type="submit" onclick="
+                                encryptAndDownloadFile(
+                                    document.getElementById('fileInput').files,
+                                    domainConcat(document.getElementById('fileDomain').value, document.getElementById('filePassword').value),
+                                    document.getElementById('useHash').checked
+                                ); return false;">
                                 Encrypt/decrypt and download file...
                             </button>
                             <br>
@@ -134,7 +148,7 @@
                             <input type="password" id="search">
                             <br>
                             <button id="open" type="submit" onclick=
-                                "findAndLoad(document.getElementById('search').value); return false;">
+                                "findAndLoad(document.getElementById('search').value, false); return false;">
                                 Find and open with password
                             </button>
                         </form>
