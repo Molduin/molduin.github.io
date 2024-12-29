@@ -93,8 +93,8 @@ function prependDomainIfExists(password) {
 }
 
 function domainConcat(domain, password){
-    console.log("domainConcat: domain: "+domain+"password: "+password);
     if (domain === "" || domain == null || domain == undefined) return password;
+    if (password === "" || password == null || password == undefined) return domain;
     return domain + "/" + password;
 }
 
