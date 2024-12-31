@@ -62,14 +62,13 @@
                         <p>
                             As an additional security measure,
                             before being passed to the function generating the key,
-                            the password is concatenated with a Uint8Array representation of the plaintext's length.
-                            This is done to avoid using the same encryption key for two different files,
-                            the old file and the new, edited file, which could reduce security.
-                            This way, I can keep using the same password for a file after having edited it.
-                        </p>
-                        <p>
-                            In the same vein, I could instead use a random salt which won't be encrypted,
-                            which would cover the few cases in which the length of the file doesn't change after editing the plaintext.
+                            the password is concatenated with a random salt that is 8 bytes long.
+                            That salt is saved into the first 8 bytes of the encrypted file.
+                            When decrypting, that salt is read from the file and appended to the provided password.
+                            This is done so that even when two files are encrypted using the same password,
+                            the key used to encrypt it will (most likely) be different.
+                            This is useful when editing files, since I do not want to change the password
+                            every time a file has been edited.
                         </p>
                         <p class="infobox">
                             Yes, you <i>could</i> use this page as a personal file encryption and decryption tool,
@@ -79,11 +78,6 @@
 
                         <h2>Future Considerations</h2>
                         <ul>
-                            <li>
-                                As mentioned, I might include a random salt in encrypted files,
-                                as well as (though I don't necessarily see a use for this just yet)
-                                a utility to choose that salt manually while encrypting.
-                            </li>
                             <li>
                                 I might add the functionality of the Hub to the navigation bar on each page,
                                 but that would require importing all of the file finding code to those pages.
@@ -98,6 +92,10 @@
                                 not to mention that the size of the files decrypted will probably stay way under a megabyte.
                                 If performance does become an issue, I could potentially try
                                 re-writing the algorithm in another language using WebAssembly.
+                            </li>
+                            <li>
+                                A utility to manually choose the salt when encrypting would be interesting,
+                                but I do not see a use for that.
                             </li>
                         </ul>
                     </div>
@@ -176,9 +174,9 @@
                 </div>
 
                 <aside>
-                    <h3>Notes</h3>
+                    <h3>To Do:</h3>
                     <p>
-                        Hey look, it's empty for once
+                        Explain all the parameters - confirmation hash, domain, html boilerplate removal
                     </p>
                 </aside>
 

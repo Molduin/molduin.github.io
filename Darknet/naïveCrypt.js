@@ -49,8 +49,12 @@ function _encryptAndDownloadFile(file, password, useHash, removeBodyTag, decrypt
             downloadFile(passHash, encryptedData);
         } else {
             const name = file.name.toString();
-            if(name.lastIndexOf("ENCRYPTED_",0)===0) {
-                var encryptedFileName = name.substr(10); // Mhh I love var scoping
+            if(decrypt){
+                if(name.lastIndexOf("ENCRYPTED_",0)===0) {
+                    var encryptedFileName = name.substr(10); // Mhh I love var scoping
+                } else {
+                    var encryptedFileName = "DECRYPTED_" + file.name.toString();
+                }
             } else {
                 var encryptedFileName = "ENCRYPTED_" + file.name.toString();
             }
