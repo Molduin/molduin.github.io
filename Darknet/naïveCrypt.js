@@ -19,28 +19,31 @@ const typeSizes = {
   
 const sizeOf = value => typeSizes[typeof value](value);
 
-// Encrypting utilities
-function encryptAndDownloadFile(files, password, useHash){
+// ENCRYPTING UTILITIES
+function encryptAndDownloadFile(files, domain, password, useFileName, useHash, removeBodyTag, decrypt){
+    // Input handling
+
     if(files.length == 0) {
         alert("No files provided.");
         return;
     }
-    if(password == "" || password == null) {
+    const file = files[0];
+    const fullPwd = useFileName ? file.name : domainConcat(domain, password);
+    if(fullPwd == "" || fullPwd == null) {
         console.log("Encrypting failed. You must provide a password.")
         alert("Encrypting failed. You must provide a password.");
         return;
     }
-    const file = files[0];
+    _encryptAndDownloadFile(file, fullPwd, useHash, removeBodyTag, decrypt);
+}
+
+function _encryptAndDownloadFile(file, password, useHash, removeBodyTag, decrypt){
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
     reader.addEventListener("loadend", () => {
-        if(password == "" || password == null) {
-            console.log("Encrypting failed. You must provide a password.")
-            alert("Encrypting failed. You must provide a password.");
-            return;
-        }
         const data = new Uint8Array(reader.result);
-        const encryptedData = encrypt(data, password);
+        const encryptedData = removeBodyTag ?
+            encrypt(data, password, 22, 8, decrypt) : encrypt(data, password, 0, 0, decrypt);
         if(useHash){
             const passHash = toHexString(defaultHash(assertUint8Array(password)));
             downloadFile(passHash, encryptedData);
@@ -70,7 +73,6 @@ function downloadFile(name, data) {
 async function findAndLoad(password, useDomain) {
     if (useDomain == true)
         password = prependDomainIfExists(password);
-    console.log("Full password: "+password);
     password = assertUint8Array(password);
     const passHash = toHexString(defaultHash(password));
     const filePath = "Files/"+passHash;
@@ -80,10 +82,8 @@ async function findAndLoad(password, useDomain) {
         return;
     }
     const content = await readFile(filePath, password);
-    // Content is not supposed to include <!DOCTYPE html> and <html></html>.
-    document.querySelector("html").innerHTML
-        = //"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>" + // </title></head>
-        new TextDecoder("UTF-8").decode(content);
+    // Content doesn't need to include <!DOCTYPE html> and <html></html>. However, it won't break most browsers if it does.
+    document.querySelector("html").innerHTML = new TextDecoder("UTF-8").decode(content);
 }
 
 function prependDomainIfExists(password) {
@@ -100,7 +100,7 @@ function domainConcat(domain, password){
 
 async function readFile(path, key) {
     const string = await fetchFile(path);
-    const decrypted = encrypt(string, key);
+    const decrypted = encrypt(string, key, 0, 0, true)
     return decrypted;
 }
 
@@ -121,25 +121,39 @@ async function fileExists(path) {
     }
 }
 
+function decrypt(text, key) {
+    return encrypt(text, key, 0, 0, true);
+}
+
 /**
- * 
  * @param {(string|Uint8Array)} text - Text to be encrypted
  * @param {(string|Uint8Array)} key - Encryption key or password
+ * @param {num} startMargin - Number of bytes at the start of the data that are discarded
+ * @param {num} endMargin - Number of bytes at the end of the data that are discarded
+ * @param {bool} decrypt - Mode. If true, decrypts. If false, encrypts.
  */
-function encrypt(text, key) {
+function encrypt(text, key, startMargin, endMargin, decrypt) {
     text = assertUint8Array(text);
     key = assertUint8Array(key);
 
-    /*  Extra security measure so you don't have to change the password when editing a file in case its length has changed
-        (which it probably has if you have made any substantial edits).
-        This way, we avoid encrypting two different blocks of plaintext (the original one, and the changed one)
-        using the same part of the overlay. */
-    key = [...key, ...numToUint8Array(text.length)];
+    let salt = new Uint8Array(8);
+    if(decrypt){ // First 8 bits of any encrypted data are its salt
+        for(var i = 0; i < 8; i++) {
+            salt[i] = text[i];
+        }
+        startMargin += 8;
+    } else { // Add random salt so you can re-use the same key after changing a file. Size is 8 bytes
+        salt = window.crypto.getRandomValues(salt);
+    }
+    key = [...key, ...salt];
 
     // Might be larger than the text if the size of the text is not a multiple of 512 bits (64 bytes)
-    let overlay = streamA(Math.ceil(text.length/64), key);
-    let ciphertext = xor(text, overlay, text.length);
+    let overlay = streamA(Math.ceil((text.length-startMargin-endMargin)/64), key);
+    let ciphertext = xor(text, overlay, text.length-startMargin-endMargin, startMargin);
 
+    if(!decrypt) { // If encrypting, prepend the salt
+        return Uint8Array.from([...salt, ...ciphertext]);
+    }
     return ciphertext;
 
     // ---------------------------------------------------------------------------------------------------------------
@@ -162,16 +176,16 @@ function encrypt(text, key) {
     }
 
     /**
-     * Arguments have to be of the same length, or no more than numOfBytes
-     * @param {Uint8Array} array1 
-     * @param {Uint8Array} array2 
-     * @param {number} numOfBytes - The amount of bytes in the result. Must be at most the length of either array1 or array2, whichever one is smaller.
+     * @param {Uint8Array} textArray - Use for data
+     * @param {Uint8Array} overlayArray - Use for overlay
+     * @param {number} numOfBytes - Amount of bytes in the result.
+     * @param {number} startIndex - First byte of textArray to be considered.
      */
-    function xor(array1, array2, numOfBytes){
+    function xor(textArray, overlayArray, numOfBytes, startIndex){
 
         let result = new Uint8Array(numOfBytes);
         for(let i = 0; i < numOfBytes; i++){
-            result[i] = array1[i]^array2[i];
+            result[i] = textArray[i+startIndex]^overlayArray[i];
         }
 
         return result;
@@ -220,15 +234,4 @@ function toHexString(byteArray) {
  */
 function fromHexString (hexString) {
     return Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
-}
-
-function numToUint8Array(num) {
-    let arr = new Uint8Array(8);
-  
-    for (let i = 0; i < 8; i++) {
-      arr[i] = num % 256;
-      num = Math.floor(num / 256);
-    }
-  
-    return arr;
 }

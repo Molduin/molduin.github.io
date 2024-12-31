@@ -128,19 +128,38 @@
                                 document.getElementById('filePassword').type=this.checked?'text':'password'">
                             <label for="showText">Show Text</label>
                             <br>
-                            <button id="download" type="submit" onclick="
+                            <input id="useFileName" type="checkbox">
+                            <label for="useFileName">Use file name as encryption password</label>
+                            <br>
+                            <button id="encrypt" onclick="
                                 encryptAndDownloadFile(
                                     document.getElementById('fileInput').files,
-                                    domainConcat(document.getElementById('fileDomain').value, document.getElementById('filePassword').value),
-                                    document.getElementById('useHash').checked
+                                    document.getElementById('fileDomain').value,
+                                    document.getElementById('filePassword').value,
+                                    document.getElementById('useFileName').checked,
+                                    document.getElementById('useHash').checked,
+                                    document.getElementById('removeBody').checked,
+                                    false
                                 ); return false;">
-                                Encrypt/decrypt and download file...
+                                Encrypt...
+                            </button>
+                            <button id="decrypt" onclick="
+                                encryptAndDownloadFile(
+                                    document.getElementById('fileInput').files,
+                                    document.getElementById('fileDomain').value,
+                                    document.getElementById('filePassword').value,
+                                    document.getElementById('useFileName').checked,
+                                    document.getElementById('useHash').checked,
+                                    document.getElementById('removeBody').checked,
+                                    true
+                                ); return false;">
+                                Decrypt...
                             </button>
                             <br>
                             <input id="useHash" type="checkbox">
                             <label for="useHash">Rename file to confirmation hash</label>
-                            <input id="cullHead" type="checkbox">
-                            <label for="cullHead">Cull Head</label>
+                            <input id="removeBody" type="checkbox">
+                            <label for="removeBody">Remove HTML boilerplate (first 22 and final 8 bytes)</label>
                         </form>
 
                         <h2>Find, decrypt and view existing file automatically</h2>
