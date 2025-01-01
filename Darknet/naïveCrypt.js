@@ -28,7 +28,7 @@ function encryptAndDownloadFile(files, domain, password, useFileName, useHash, r
         return;
     }
     const file = files[0];
-    const fullPwd = useFileName ? file.name : domainConcat(domain, password);
+    const fullPwd = useFileName ? domainConcat(domain, file.name) : domainConcat(domain, password);
     if(fullPwd == "" || fullPwd == null) {
         console.log("Encrypting failed. You must provide a password.")
         alert("Encrypting failed. You must provide a password.");
