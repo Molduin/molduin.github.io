@@ -1,1 +1,1 @@
-A personal website.
+This website has been moved permanently to https://moldur.codeberg.page
